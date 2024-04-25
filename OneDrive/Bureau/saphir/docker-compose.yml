@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  frontend:
+    build: ./frontend
+    container_name: react-app
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+    networks:
+      - mysql-networks
+
+  backend:
+    build: ./backend
+    container_name: node-api
+    ports:
+      - "5000:5000"
+    restart: always
+    depends_on:
+      - database
+    networks:
+      - mysql-networks
+
+    database:
+    image: mysql
+    container_name: mysql-db
+    ports:
+      - "3306:3306" 
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: "lms"
+      MYSQL_USER: "root"
+    networks:
+      - mysql-networks
+
+networks:
+  mysql-networks:
+    driver: bridge
