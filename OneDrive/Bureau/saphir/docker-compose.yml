@@ -11,7 +11,7 @@ services:
     depends_on:
       - backend
     networks:
-      - mysql-networks
+      - mern-networks
 
   backend:
     build: ./backend
@@ -22,20 +22,18 @@ services:
     depends_on:
       - database
     networks:
-      - mysql-networks
+      - mern-networks
 
-    database:
-    image: mysql
-    container_name: mysql-db
+  database:
+    image: mongo
+    container_name: mongo-db
     ports:
-      - "3306:3306" 
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: "lms"
-      MYSQL_USER: "root"
+      - "27017:27017"
+    volumes:
+      - /c/Users/Guentiti/mongo_backup:/data/db  
     networks:
-      - mysql-networks
+      - mern-networks
 
 networks:
-  mysql-networks:
+  mern-networks:
     driver: bridge
